@@ -19,7 +19,7 @@ html, body {
     width: 100%;
     position: relative;
     min-width: 320px; /* Evita que la web se reduzca más allá de este punto */
-    overflow-x: hidden; /* Evita que aparezca el scroll lateral si algo se sale un poco */
+    /*overflow-x: hidden; *//* Evita que aparezca el scroll lateral si algo se sale un poco */
 }
 
 body {
@@ -1219,10 +1219,11 @@ body.is-editor .admin-controls {
     /* TOPBAR */
         .topbar {
             padding: 10px 20px;
-            grid-template-columns: auto auto auto; /* Logo, Burger, Editor */
             grid-template-columns: 1fr auto auto; 
             backdrop-filter: none;
-            z-index: 15;
+            position: sticky; 
+            top: 0;
+            z-index: 20;
         }
         /* Clase para mostrar el menú cuando se active */
         .topbar nav.nav-active {
@@ -1242,7 +1243,7 @@ body.is-editor .admin-controls {
             gap: 40px;
             transition: right 0.4s ease;
             box-shadow: -5px 0 15px rgba(0,0,0,0.5);
-            z-index: 16;
+            z-index: 30;
         }
         /* Burger menu*/
         .burger-menu {
