@@ -1,0 +1,1655 @@
+:root {
+    --crystal-blue: #5EB8B8;
+    --orange: #C25B51;
+    --ny-pink: #D68274;
+    --middle-blue: #A1F3EC;
+    --new-white: #F0F7F8;
+    --rick-black: #06363D;
+}
+
+* {
+    margin:0;
+    padding:0;
+    box-sizing: border-box;
+    font-family: "Aleo", sans-serif;
+}
+
+html, body {
+    overflow-x: clip; /* Evita el scroll horizontal por elementos fuera de pantalla */
+    width: 100%;
+    position: relative;
+    min-width: 320px; /* Evita que la web se reduzca más allá de este punto */
+    overflow-x: hidden; /* Evita que aparezca el scroll lateral si algo se sale un poco */
+}
+
+body {
+    background: var(--new-white);
+    color: var(--rick-black);
+} 
+
+.container {
+    max-width: 1200px; /* El ancho máximo que quieres para tu web */
+    margin: 0 auto; /* Centra el bloque horizontalmente */
+    padding: 0 40px; /* Margen interno para que en móviles no toque el borde */
+    width: 100%; /* Asegura que ocupe el espacio disponible */
+}
+
+/* Regla general: Las secciones se apilan solas por defecto (display: block) */
+    .progress, .current-reading, .last-reads, .tbr {
+        width: 100%;
+        padding: 40px 0; /* Espaciado vertical para que respiren */
+        display: block;  /* Asegura el apilado vertical */
+    }
+/* Regla general para los títulos de sección */
+    .last-reads h3, .tbr h3, .current-reading h3 {
+        font-size: 2.5rem;
+        color: var(--rick-black);
+        border-bottom: 4px solid var(--orange);
+        padding-bottom: 10px;
+        margin-bottom: 30px;
+        display: block; /* Ocupa el ancho del contenedor (.container) */
+    }
+
+/* TOPBAR */
+    /*Reglas generales para el TOPBAR*/
+    .header-actions {
+        display: flex;
+        align-items: center;
+        gap: 10px; /* Separa el botón de Salir del botón de Usuario */
+    }
+    .topbar {
+        display: grid;
+        grid-template-columns: auto 1fr auto;
+        align-items: center;
+        padding: 10px 40px;
+        position: sticky;
+        top: 0;
+        z-index: 10; /* Siempre por encima del resto de elementos para que se vea */
+        box-shadow: 0 2px 10px rgba(0,0,0,0.3); /* Sombra sutil para dar profundidad al hacer scroll */
+        background: var(--rick-black);
+        backdrop-filter: blur(10px); /* Desenfoque tipo cristal */
+    }
+    .menu-container {
+    display: flex;
+    justify-content: flex-end; /* Empuja el nav hacia la derecha, cerca de los botones */
+    }
+    /* Regla para el logo */
+    .logo img {
+        height: 40px;
+        width: auto;
+        display: block;
+    }
+    /*Regla para los enlaces del menú*/
+    .topbar nav {
+        display: flex;
+        justify-content: flex-end;
+        gap: 32px;
+        padding:0 20px;
+    }
+    .topbar nav a {
+        color: var(--new-white);
+        text-decoration: none;
+        font-weight: 500;
+        position: relative;
+        padding: 6px 0;
+    }
+    .topbar nav a::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 0%;
+        height: 2px;
+        background: var(--ny-pink);
+        transition: width 0.3s ease;
+    }
+    .topbar nav a:hover::after {
+        width: 100%;
+    }
+    /* Botón acceso a Modo Editor*/
+    .editor-btn {
+        background: white;
+        border: 1px solid white;
+        border-radius: 50%;
+        width: 36px;
+        height: 36px;
+        display: grid;
+        place-items: center;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+    .editor-btn:hover {
+        background: var(--orange);
+        border-color: var(--orange);
+    }
+    .editor-btn:hover svg {
+        fill: white;
+    }
+    /* Burger Menu solo se verá en responsive */
+    .burger-menu {
+        display: none; 
+        background: none;
+        border: none;
+    }
+
+/* SECCIÓN HERO (index) */
+    .hero {
+        position: relative;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        align-items: center;
+        gap: 40px;
+        padding: 60px;
+        background: var(--new-white);
+    }
+    .hero-text h2 {
+        font-size: 3rem;
+        color: var(--crystal-blue);
+    }
+    .hero-text button {
+        margin-top: 20px;
+        padding: 12px 24px;
+        background: var(--orange);
+        color: var(--new-white);
+        border: none;
+        border-radius: 30px;
+        cursor: pointer;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+        transition: all 0.25s ease;
+    }
+    .hero-text button:hover {
+        background: var(--middle-blue);
+        color: var(--rick-black);
+        transform: translateY(-2px);
+    }
+    /* Contenedor de las imágenes (Marco + Portada) */
+    .hero-image-container {
+        position: relative;
+        width: 320px; /* Ajustado al tamaño del marco */
+        height: 400px;
+        margin-left: auto;
+    }
+    /* El Marco Amarillo (Capa Superior) */
+    .hero-frame {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 2; /* Siempre por encima */
+        pointer-events: none; /* Permite que los clics pasen a través si fuera necesario */
+        object-fit: contain;
+    }
+    /* La Portada del Libro (Capa Inferior) */
+    #hero-book-cover {
+        position: absolute;
+        width: 65%; /* Ajustado para que encaje dentro del hueco del marco */
+        top: 10%;
+        left: 17%;
+        z-index: 1; /* Por debajo del marco */
+        object-fit: cover;
+        border-radius: 4px;
+        background: white;
+    }
+    /* ANIMACIÓN: Solo para la portada */
+        .animar-portada {
+            animation: revelarPortada 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+        }
+        /* Animación de revelado de portada en el Hero */
+        @keyframes revelarPortada {
+            0% {
+                transform: scale(0.5) rotate(-10deg);
+                filter: brightness(0) blur(10px);
+                opacity: 0;
+            }
+            50% {
+                filter: brightness(1.5);
+            }
+            100% {
+                transform: scale(1) rotate(0deg);
+                filter: brightness(1) blur(0);
+                opacity: 1;
+            }
+        }
+
+/* SECCIÓN PROGRESO (index) */
+    .progress {
+        position: relative;
+        display: block;
+        background-color: var(--crystal-blue);
+        margin-top: 0;
+    }
+    .progress-layout {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr); 
+        gap: 30px;
+        max-width: 750px; /* Mantenemos tu medida de diseño original */
+        margin: 0 auto;   /* Centra el grid dentro de la sección */
+        padding: 0 20px;
+    }
+    .progress-container {
+        display: grid;
+        grid-template-columns: 1fr 1fr; /* 2 columnas internas */
+        gap: 20px;
+    }
+    .card {
+        border: 6px solid var(--ny-pink);
+        padding: 20px;
+        text-align: center;
+        border-radius: 15px;
+        background-color: var(--new-white);
+    }
+    .card img{
+        height: 150px;
+        width: auto;
+        padding: 10px;
+    }
+    .big-number {
+        font-size: 8rem;
+        color: var(--ny-pink);
+    }
+
+/* SECCIÓN LECTURA ACTUAL (index) */
+    /* reglas de la seccion */
+    .current-reading {
+        background-image: url("../img/cuadros-naranja-fondo.png");
+        background-repeat: repeat; /* Se repite en horizontal y vertical */
+        background-size: auto; /* Mantiene el tamaño real de la imagen */
+        background-position: top left;
+    }
+    .current-reading-layout {
+        display: grid;
+        grid-template-columns: 320px 1fr;
+        gap: 30px 60px; /* Añadimos 30px de separación vertical (entre título y columnas) */
+        align-items: start;
+        background-color: rgba(255, 255, 255, 0.95);
+        padding: 40px;
+        border-radius: 15px; /* Para que el recuadro blanco sea más suave */
+    }
+    /* Regla para que el título ignore las columnas y se quede arriba */
+    .current-reading-title {
+        grid-column: 1 / -1; /* Ocupa las dos columnas de lado a lado */
+        font-size: 2.5rem;
+        color: var(--rick-black);
+        margin-bottom: 20px; /* Espacio con lo que viene debajo */
+        padding-bottom: 10px;
+    }
+    /* zona donde se ubica la portada del libro */
+    .current-cover-wrapper {
+        width: 304px;
+        height: 382px;
+        border-radius: 12px;
+        overflow: hidden;
+        border: 1px solid rgba(255,255,255,0.1);
+        position: relative;
+        background-image: url('../img/current-reading-marco.png'); 
+        background-size: cover;
+        background-position: center;
+        padding: 20px;
+    }
+    /* la imagen de la portada del libro */
+    .current-cover-wrapper img {
+        width: 100%;        /* Obliga a la imagen a ocupar todo el ancho del div */
+        height: 100%;       /* Obliga a la imagen a ocupar todo el alto del div */
+        object-fit: contain;
+        display: block;
+        
+    }
+    .current-img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+    }
+    /* barra de progreso */
+    .reading-progress-container {
+        margin: 25px 0;
+        max-width: 500px;
+    }
+    .progress-bar-bg {
+        width: 100%;
+        height: 10px;
+        background: var(--rick-black);
+        border-radius: 20px;
+        overflow: hidden;
+        margin-bottom: 10px;
+    }
+    .progress-bar-fill {
+        height: 100%;
+        background: var(--middle-blue);
+        box-shadow: 0 0 15px var(--middle-blue);
+        transition: width 0.8s ease-in-out;
+    }
+    .progress-stats {
+        font-size: 0.9rem;
+        color: var(--crystal-blue);
+        font-weight: 500;
+    }
+
+/*
+DE MOMENTO OCULTO HASTA QUE LO HAGA FUNCIONAR EN JS
+*/
+.admin-controls {display: none;} /* --> Borrar cuando lo programe <-- */
+/* SECCIÓN PROGRESO - MODO EDITOR*/
+/* Solo se muestra si el body tiene la clase is-editor */
+/*.admin-controls {
+    display: none;
+    gap: 15px;
+    margin-top: 30px;
+}
+
+body.is-editor .admin-controls {
+    display: flex;
+}
+
+.btn-admin {
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.btn-update {
+    background: transparent;
+    border: 1.5px solid var(--ny-pink);
+    color: var(--ny-pink);
+}
+
+.btn-update:hover {
+    background: var(--ny-pink);
+    color: var(--new-white);
+}
+
+.btn-finish {
+    background: var(--middle-blue);
+    color: white;
+    text-align: center;
+}
+
+.btn-finish:hover {
+    background: #a3097a;
+    transform: translateY(-2px);
+}
+*/
+
+/* ÚLTIMAS LECTURAS + TBR (index) */
+    /* Reglas para los titulos */
+    .last-reads h3 a, .tbr h3 a {
+        text-decoration: none;
+        color: inherit; /* Hereda el color var(--rick-black) del h3 */
+        display: inline-block;
+        transition: all 0.3s ease;
+    }
+    .last-reads h3 a:hover, .tbr h3 a:hover {
+        color: var(--orange); /* Cambia al naranja corporativo */
+    }
+    /*Regla para el grid de libros*/
+    .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+        gap: 20px;
+        padding: 20px 0;
+    }
+    /* Regla para Ultimas lecturas (y diferenciar las secciones)*/
+    .last-reads {
+        background-color: var(--crystal-blue);
+    }
+    /*Regla para las tarjetas de libros*/
+    .book-card {
+        background: var(--rick-black);
+        border-radius: 10px;
+        overflow: hidden;
+        transition: transform .25s ease, box-shadow .25s ease;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        cursor: pointer;/*hacer las tarjetas clicables -> aparece la "mano"*/
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .book-meta {
+        padding: 12px;
+        color: var(--new-white);
+        flex-grow: 1; /* Esto "empuja" a los botones .admin-actions hacia el fondo */
+    }
+    .book-cover {
+        width: 100%;
+        height: auto;
+        object-fit: cover;
+        aspect-ratio: 2 / 3;
+        display: block;
+    }
+    .book-title {
+        font-size: 1rem;
+        margin-bottom: 4px;
+    }
+    .book-author {
+        font-size: 0.8rem;
+        opacity: .7;
+    }
+    .book-card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 10px 30px rgba(0,0,0,.3);
+    }
+    .card-leido:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        border-color: var(--middle-blue);
+    }
+    .book-title, #current-book-title, #after-title {
+        word-wrap: break-word; /* Rompe la palabra si es más larga que el contenedor */
+        overflow-wrap: break-word;
+    }
+
+    /* Libros leidos -> Valoraciones y Estrellas */
+    .star-filled {
+        color: #FFD700; /* Dorado para las llenas */
+        text-shadow: 0 0 5px rgba(255, 215, 0, 0.3);
+    }
+    .star-empty {
+        color: #ccc; /* Gris para las vacías */
+    }
+    .user-rating {
+        margin: 5px 0;
+        font-size: 1.1rem;
+    }
+    .user-comment {
+        font-size: 0.75rem;
+        font-style: italic;
+        color: var(--new-white);
+        opacity: 0.8;
+        margin-top: 8px;
+        display: -webkit-box;
+        -webkit-line-clamp: 3; /* cortar el texto en la línea 3 | Para navegadores basados en Webkit (Chrome, Safari) */
+        line-clamp: 3; /* cortar el texto en la línea 3 | Propiedad estándar que te pide VS Code */
+        -webkit-box-orient: vertical; /* en qué dirección debe contar esas líneas*/
+        overflow: hidden; /*Esconder físicamente el texto que sobra después del corte*/
+    }
+
+/* MODAL -> Reglas generales para las ventanas modales */
+    .modal {
+        display: none; 
+        position: fixed;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        background: rgba(1, 22, 39, 0.9); /* Azul profundo con transparencia */
+        z-index: 3000; /* Aseguramos que esté por encima de todo */
+        place-items: center;
+        backdrop-filter: blur(5px); /* Efecto de cristal esmerilado */
+        justify-content: center; /* Centrado horizontal */
+        align-items: center;
+    }
+    /* LA REGLA MÁS IMPORTANTE: Sin esto, los modales no aparecen */
+    .modal.active { 
+        display: grid; 
+    }
+    /* Base para el contenido (especialmente para el modal de login) */
+    .modal-content {
+        background: var(--rick-black);
+        padding: 40px;
+        border-radius: 15px;
+        color: var(--new-white);
+        max-width: 400px;
+        width: 90%;
+        position: relative;
+        text-align: center;
+        animation: modalAppear 0.3s ease-out; /* Añadimos la animación que ya tienes creada */
+    }
+    /* Animacion para la ventana modal */
+        @keyframes modalAppear {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+    /* Estilo base de la X de cerrar */
+    .close-modal {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        cursor: pointer;
+        color: var(--new-white);
+        transition: color 0.2s;
+        z-index: 20;
+    }
+    .close-modal:hover {
+        color: var(--middle-blue);
+    }
+
+
+/* MODAL LIBRO LEIDO (RESEÑA) -> donde se ve la puntuación, reseña o citas introducidas por el usuario */
+    /* El contenedor*/
+    #modal-info .info-modal-content {
+        max-width: 600px ; /* Más ancho qu el modal de acceso modo editor para que la lectura sea cómoda */
+        background-color: var(--new-white) ;
+        color: var(--rick-black) ;
+        border: 3px solid var(--new-white);
+        padding: 50px 40px ;
+        text-align: left ; /* Alineamos el texto a la izquierda para leer mejor */
+    }
+    /* Textos del modal */
+    #info-title {
+        font-size: 2.2rem;
+        color: var(--rick-black);
+        margin-bottom: 5px;
+        border: none; /* Quitamos el borde que tiene el modal de acceso */
+    }
+    #info-author {
+        font-size: 1.1rem;
+        color: var(--ny-pink);
+        margin-bottom: 7px;
+        display: block;
+    }
+    /* Estrellas de la reseña */
+    #info-rating {
+        background: rgba(6, 54, 61, 0.05);
+        padding: 5px 20px;
+        border-radius: 50px;
+        display: inline-block;
+        margin-bottom: 30px;
+    }
+    /* Secciones de Pensamientos y Citas */
+    .info-section {
+        margin-bottom: 25px;
+    }
+    .info-section strong {
+        display: block;
+        text-transform: uppercase;
+        font-size: 0.8rem;
+        letter-spacing: 1px;
+        color: var(--rick-black);
+        margin-bottom: 8px;
+    }
+    #info-comment {
+        line-height: 1.6;
+        font-size: 1.05rem;
+    }
+    /* Estilo especial para las citas (Quotes) */
+    #info-quotes {
+        font-style: italic;
+        font-size: 1.1rem;
+        color: var(--rick-black);
+        background: white;
+        padding: 20px;
+        border-left: 5px solid var(--middle-blue);
+        box-shadow: 4px 4px 0px rgba(0,0,0,0.05);
+    }
+    /* La X para este modal */
+    #modal-info .close-modal {
+        color: var(--rick-black); /* Color oscuro sobre fondo claro */
+        font-size: 2rem;
+        font-weight: bold;
+        opacity: 0.7;
+        transition: opacity 0.2s;
+    }
+    #modal-info .close-modal:hover {
+        color: var(--orange);
+        opacity: 1;
+    }
+
+/* MODAL INFO DEL LIBRO -> los libros que están en TBR */
+    /* La tarjeta del modal */
+    #book-modal .modal-content {
+        position: relative;
+        display: flex;
+        flex-direction: column; /* Organiza el contenido verticalmente */
+        overflow: hidden; /* Evita que el contenido se salga de los bordes */
+        overflow-y: auto;
+        width: 95%;
+        max-width: 850px; /* Ancho suficiente para dos columnas */
+        max-height: 80vh;
+        position: relative;
+        padding: 0; /* Quitamos el padding para controlar el diseño interno */
+        margin: auto;
+        background: var(--new-white); /* Fondo oscuro para que resalte la ficha */
+        color: var(--rick-black);
+        border-radius: 15px;
+        border: 1px solid rgba(222, 186, 216, 0.3); /* Borde sutil rosa */
+    }
+    .modal-body {
+        display: grid;
+        grid-template-columns: 300px 1fr;
+        gap: 0px;
+    }
+    /* Imagen de la portada del libro */
+    .modal-cover img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 8px;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+    }
+    /* bloque de texto (título, autor, sinopsis) */
+    .modal-info {
+        padding: 40px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        text-align: left; /* Alineamos el texto a la izquierda */
+
+    }
+    /* Titulo del libro */
+    .modal-info h2 {
+        color: var(--crystal-blue);
+        font-size: 2.2rem;
+        margin-bottom: 5px;
+    }
+    /* Info del autor */
+    .modal-info h3 {
+        color: var(--ny-pink);
+        font-size: 1.3rem;
+        margin-bottom: 20px;
+        font-weight: 500;
+    }
+    /* Titulo sinopsis */
+    .modal-description h4 { 
+        color: var(--orange); 
+        margin-top: 20px; 
+        margin-bottom: 10px; 
+    }
+    .modal-description p {
+        line-height: 1.7;
+        font-size: 1.05rem;
+        color: var(--rick-black);
+    }
+    /* Etiquetas de género dentro del modal */
+    .genres-container { 
+        display: flex; gap: 10px; 
+        flex-wrap: wrap; 
+        margin-top: 10px; 
+    }
+    .genre-tag {
+        background: rgba(6, 54, 61, 0.1); /* Fondo oscuro sutil */
+        color: var(--rick-black);
+        padding: 5px 12px;
+        border-radius: 6px;
+        font-size: 0.85rem;
+        font-weight: 600;
+    }
+    /* Ocultar el numero de paginas del libro */
+    #book-modal .modal-footer {
+        display: none;
+    }
+    /* Botón de cierre del modal */
+    #book-modal .close-modal {
+        color: var(--rick-black);
+        z-index: 10; /* Aseguramos que siempre esté por encima de la imagen */
+        font-weight: bold;
+        opacity: 0.6;
+        transition: opacity 0.2s;
+    }
+    #book-modal .close-modal:hover {
+        opacity: 1;
+        color: var(--orange);
+    }
+
+/* -- MODO EDITOR -- */
+
+    /* MODAL ACCESO EDITOR */
+        #modal-editor .modal-content {
+            max-width: 400px;
+            padding: 30px 30px;
+        }
+        #modal-editor h3 {
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--middle-blue);
+        }
+        #modal-editor p {
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+        /* Estilo para el input de la contraseña */
+        #editor-key {
+            width: 100%;/* Ocupa todo el ancho disponible del contenedor */
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            color: white;
+            text-align: center;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+        #editor-key:focus {
+            border-color: var(--middle-blue);
+        }
+        /* Botón acceso modo editor*/
+        #modal-editor .submit-btn {
+            width: auto;
+            min-width: 160px;
+            padding: 10px 24px;
+            margin: 0 auto;
+            display: block;/* Necesario para que el centrado funcione */
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+        }
+        /*Botones de los modales (acceso modo editor y libro leido)*/
+        .submit-btn {
+            width: 100%;
+            padding: 15px;
+            background: var(--orange);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .submit-btn:hover {
+            background: var(--middle-blue);
+            color: var(--rick-black);
+        }
+
+    /* MODO EDITOR - Contenedor de botones, oculto por defecto */
+        .admin-actions {
+            display: none; /* No se ve para el usuario normal */
+            gap: 10px;
+            padding: 10px;
+            background: rgba(1, 22, 39, 0.1);
+            border-top: 1px solid #ddd;
+        }
+        /* Solo se muestra si el body tiene la clase is-editor (activada por el modal) */
+        body.is-editor .admin-actions {
+            display: flex;
+            justify-content: center;
+        }
+        /* Cuando el modo editor está activo, podemos ocultar el botón de login para no confundir */
+        body.is-editor .editor-btn {
+            display: none;
+        }
+        /* botón de cerrar sesion modo editor*/
+        body.is-editor .logout-btn { /* Solo se muestra si estamos en modo editor */
+            display: inline-block;
+        }
+        /*Botones de edición de las secciones Ultimas lecturas y TBR */
+        .btn-admin {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 5px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            font-weight: 700;
+            transition: transform 0.2s;
+        }
+        .btn-admin:active {
+            transform: scale(0.95);
+        }
+        /* Botón de editar*/
+        .btn-edit { 
+            background: var(--crystal-blue);
+            color: white; 
+        }
+        .btn-edit:hover {
+            background: var(--rick-black);
+            color: var(--new-white);
+        }
+        /* Botón de borrar*/
+        .btn-delete { 
+            background: var(--orange); 
+            color: white; 
+        }
+        /* Botón para marcarlo como leído*/
+        .btn-read { 
+            background: var(--crystal-blue);
+            color: white;
+        }
+        /* Botón de cerrar sesión modo editor */
+        .logout-btn {
+            display: none; /* Oculto por defecto */
+            background: var(--orange);
+            color: var(--new-white);
+            border: none;
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-right: 10px;
+            transition: background 0.2s;
+        }
+        .logout-btn:hover {
+            background: var(--middle-blue);
+            color: var(--rick-black);
+        }
+
+        /* MODAL LIBRO LEIDO -> donde el usuario introduce la reseña (solo disponible en modo editor) */
+            /* Estructura y Fondo */
+            #modal-after .modal-content {
+                display: flex;
+                background: var(--rick-black); 
+                color: var(--new-white);
+                max-width: 900px;
+                width: 95%;
+                padding: 0;
+                overflow: hidden;
+            }
+            #modal-after .modal-body {
+                display: grid;
+                grid-template-columns: 350px 1fr;
+                width: 100%;
+                gap: 0;
+            }
+            /* Portada del libro */
+            #modal-after .modal-cover {
+                width: 100%;
+                height: 100%;
+                background: rgba(0,0,0,0.2);
+                display: flex;
+                align-items: center;
+            }
+            #modal-after .modal-cover img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover; /* Asegura que la imagen llene el espacio sin deformarse */
+            }
+            /* Espaciado del formulario */
+            #modal-after .modal-info {
+                padding: 50px 40px; /* Replicamos el padding del modal-info */
+                display: flex;
+                flex-direction: column;
+                justify-content: flex-start;
+            }
+            /* Etiquetas (Labels), títulos y Subtítulos */
+            #modal-after label {
+                color: var(--crystal-blue);
+                font-size: 0.8rem;
+                font-weight: 600;
+                text-transform: uppercase;
+                letter-spacing: 1px;
+                display: block;
+                margin-bottom: 5px;
+            }
+            /* El texto base (Tu reseña de: / Editando:) */
+            #after-title {
+                color: var(--new-white); /* Puedes usar --orange, --crystal-blue o cualquier otro */
+                font-size: 1rem;
+                font-weight: 400;
+                margin-bottom: 5px;
+            }
+            /* El nombre del libro específico */
+            .book-title-highlight {
+                color: var(--crystal-blue); /* El color que tú prefieras para el título */
+                font-size: 1.8rem;
+                font-weight: 700;           /* Más grueso para que sea lo primero que se lea */
+                display: block;             /* OPCIONAL: Ponlo en una línea nueva para que luzca más */
+                margin-top: 5px;
+            }
+            .admin-subtitle {
+                color: var(--ny-pink);
+                font-style: italic;
+                margin-bottom: 20px;
+                display: block;
+            }
+            /* Inputs y Textareas (Estilo base) */
+            #modal-after input, 
+            #modal-after textarea {
+                width: 100%;
+                background: rgba(255, 255, 255, 0.05);
+                border: 1.5px solid var(--crystal-blue);
+                color: var(--new-white);
+                padding: 10px;
+                border-radius: 8px;
+                font-family: inherit;
+                outline: none;
+                transition: border-color 0.3s ease;
+            }
+            /* Especificaciones para Textarea */
+            #modal-after textarea {
+                resize: none;
+                margin-top: 5px;
+            }
+            /* Estados y Utilidades */
+            #modal-after input:focus, 
+            #modal-after textarea:focus {
+                border-color: var(--middle-blue);
+            }
+            .char-count {
+                display: block;
+                text-align: right;
+                font-size: 0.7rem;
+                color: var(--new-white);
+                opacity: 0.6;
+                margin-top: 2px;
+            }
+
+/* PAGINA MI BIBLIOTECA y TBR */
+    /* Layout y Título */
+    .library-layout {
+        display: grid;
+        grid-template-columns: 280px 1fr; /* Sidebar fija, Contenido flexible */
+        gap: 40px;
+        padding-top: 40px;
+        padding-bottom: 60px;
+    }
+    /* Titulo de la página (Mi biblioteca y TBR) */
+    .page-title {
+        font-size: 2.5rem;
+        margin-bottom: 20px;
+        border-bottom: 4px solid var(--orange); 
+        padding-bottom: 5px;
+        color: var(--rick-black);
+    }
+    /* Barra de acciones en móvil */
+    .mobile-actions-bar {
+        display: none; /* OCULTO EN ESCRITORIO */
+    }
+    /* Estructura del Sidebar */
+    .sidebar {
+        position: sticky;
+        top: 100px;
+        height: fit-content;
+    }
+    /* Titulo del sidebar */
+    .sidebar-main-title {
+        font-size: 1.2rem;
+        color: var(--rick-black);
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        margin-bottom: 25px;
+        padding-bottom: 10px;
+        border-bottom: 2px solid var(--crystal-blue); /* Línea decorativa turquesa */
+        display: block;
+        width: 100%;
+    }
+    /* Botón de filtros en móvil */
+    .btn-filtrar-minimal {
+        display: flex;         /* Necesario para poner icono y texto en línea */
+        align-items: center;   /* Centra verticalmente el icono con el texto */
+        justify-content: flex-end; /* Lo pega todo al borde derecho */
+        gap: 8px;              /* Espacio entre el embudo y la palabra FILTRAR */
+        background: none;
+        border: none;
+        font-family: "Aleo", sans-serif;
+        font-weight: 700;
+        font-size: 0.75rem;    /* Mantenemos el tamaño pequeño de la captura */
+        color: var(--rick-black);
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        cursor: pointer;
+        flex: 1;
+    }
+
+    .btn-filtrar-minimal svg {
+        /* El color del icono será automáticamente el mismo que el del texto */
+        stroke: currentColor; 
+    }
+    /* Grupos de Filtros y Buscador */
+    .search-filters {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start; /* Alinea los hijos al inicio (izquierda) */
+        gap: 15px;
+        width: 100%;
+        margin-bottom: 10px;
+        padding: 0; /* Aseguramos que no haya padding lateral */
+    }
+    .filter-group {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start; /* Refuerza la alineación a la izquierda */
+        margin-bottom: 10px;
+    }
+    .filter-group h4 {
+        color: var(--ny-pink);
+        text-transform: uppercase;
+        font-size: 0.8rem;
+        letter-spacing: 1px;
+        margin-bottom: 15px;
+        border-bottom: 1px solid rgba(6, 54, 61, 0.1);
+        padding-bottom: 5px;
+        width: 100%;
+    }
+    /* Inputs (Buscador y Selector de Orden) */
+    #search-input, 
+    #sort-select {
+        width: 100%;
+        padding: 12px 15px;
+        border: 1.5px solid rgba(6, 54, 61, 0.2);
+        border-radius: 8px;
+        font-size: 0.95rem;
+        color: var(--rick-black);
+        background-color: #fff;
+        transition: all 0.3s ease;
+        outline: none;
+        cursor: pointer;
+    }
+    #search-input::placeholder {
+        color: rgba(6, 54, 61, 0.5);
+    }
+    #search-input:focus, 
+    #sort-select:focus {
+        border-color: var(--middle-blue);
+        box-shadow: 0 0 0 3px rgba(161, 243, 236, 0.2);
+    }
+    /* Personalización flecha Select */
+    #sort-select {
+        appearance: none;
+        background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23C25B51%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
+        background-repeat: no-repeat;
+        background-position: right 12px top 50%;
+        background-size: 10px auto;
+    }
+    /* Listados de Checkboxes */
+    .filter-list {
+        list-style: none;
+        width: 100%;
+    }
+    .filter-list li {
+        margin-bottom: 10px;
+    }
+    .filter-list label {
+        font-size: 0.9rem;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        transition: color 0.2s ease;
+    }
+    .filter-list label:hover {
+        color: var(--crystal-blue);
+    }
+    .filter-list input[type="checkbox"] {
+        accent-color: var(--ny-pink);
+        width: 16px;
+        height: 16px;
+    }
+    /* Utilidades Mobile (Ocultas por defecto) */
+    .btn-filters-mobile, 
+    .close-sidebar {
+        display: none;
+    }
+    /* Subtitulo pagina TBR*/
+    .subtitle{
+        font-size: 1rem;
+    }
+
+
+
+
+/* PAGINA RECOMENDAR */
+    /* Regla para paginas sin sidebar */
+    .simple-page-layout {
+        padding-top: 40px;
+        padding-bottom: 60px;
+    }
+    /* Contenedor de Formulario y Lista */
+    .recommendation-layout {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 40px;
+        margin-top: 30px;
+    }
+    /* Títulos internos de la página */
+    .section-small-title {
+        font-size: 1.2rem;
+        color: var(--rick-black);
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        margin-bottom: 25px;
+        padding-bottom: 10px;
+        border-bottom: 2px solid var(--crystal-blue); /* Igual que el sidebar */
+    }
+    /* Formulario*/
+    .custom-form {
+        background: var(--crystal-blue); /* Cambiamos a blanco para que resalte sobre el fondo */
+        padding: 30px;
+        border-radius: 15px;
+        border: 1px solid rgba(6, 54, 61, 0.1);
+        box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    }
+    .custom-form label {
+        color: var(--ny-pink); /* Color de los h4 del sidebar */
+        text-transform: uppercase;
+        font-size: 0.8rem;
+        font-weight: 700;
+        letter-spacing: 1px;
+        margin-bottom: 8px;
+    }
+    .custom-form input, 
+    .custom-form textarea {
+        width: 100%;
+        padding: 12px 15px;
+        border: 1.5px solid rgba(6, 54, 61, 0.2);
+        border-radius: 8px; /* Mismo radio que el buscador */
+        font-size: 0.95rem;
+        background-color: var(--new-white);
+        margin-bottom: 20px;
+    }
+    .input-group {
+        margin-bottom: 5px;
+        display: flex;
+        flex-direction: column;
+    }
+    .input-group label {
+        color: var(--rick-black); /* Usamos el rosa de tus h4 del sidebar */
+        text-transform: uppercase;
+        font-weight: 700;
+        margin-bottom: 10px;
+        font-size: 0.8rem;
+        letter-spacing: 1px;
+    }
+    .input-group input, 
+    .input-group textarea {
+        padding: 12px 15px;
+        border: 1.5px solid rgba(6, 54, 61, 0.2); /* Mismo grosor que el buscador */
+        border-radius: 8px;
+        font-size: 0.95rem;
+        color: var(--rick-black);
+        background-color: var(--new-white);
+        transition: all 0.3s ease;
+        outline: none;
+    }
+    .input-group input:focus, 
+    .input-group textarea:focus {
+        border-color: var(--middle-blue); /* Color de foco igual al buscador */
+        box-shadow: 0 0 0 3px rgba(161, 243, 236, 0.2);
+    }
+    /* Botón enviar formulario */
+    .btn-enviar-recom {
+        display: block;
+        margin: 10px auto 0;
+        padding: 12px 40px;
+        width: fit-content; /* Evita que ocupe todo el ancho si prefieres que sea pequeño */
+        border-radius: 50px;
+        font-size: 0.9rem;
+        transition: all 0.3s ease; /* Asegura una animación suave */
+    }
+    .btn-enviar-recom:hover {
+        background-color: var(--middle-blue);
+        color: var(--rick-black);
+    }
+    /* Listado de recomendaciones */
+    .recom-item {
+        background: rgba(138, 214, 208, 0.2);; /* Fondo oscuro como tus tarjetas de libros */
+        padding: 25px;
+        margin-bottom: 20px;
+        border-radius: 12px;
+        color: var(--rick-black);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        border: 2px solid var(--rick-black);
+        border-left: 5px solid var(--orange); /* Detalle naranja para conectar con el logo */
+    }
+    .recom-item:hover {
+        transform: translateY(-5px); /* Efecto hover de la biblioteca */
+        box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    }
+    .recom-item strong {
+        display: block;
+        color: var(--orange); /* Título de la recomendación en turquesa */
+        font-size: 1.1rem;
+        margin-bottom: 8px;
+    }
+    .recom-author {
+        display: block;
+        margin-top: 15px;
+        color: var(--ny-pink); /* Autor en rosa para coherencia */
+        font-size: 0.85rem;
+        font-style: italic;
+        opacity: 0.9;
+    }
+
+
+/*RESPOSIVE*/
+
+@media (max-width: 768px) {
+    /* REGLAS GENERALES MAQUETACION */
+        /* Todo a una columna*/
+        .hero, .progress, .current-reading, .last-reads, .tbr, .recommendation-layout {
+            padding: 20px 0;
+            grid-template-columns: 1fr;
+        }
+        /* Títulos de secciones */
+        .last-reads h3, .tbr h3, .current-reading h3 {
+            font-size: 1.8rem; /* Bajamos de 2.5rem a 1.8rem para pantallas pequeñas */
+            margin-bottom: 20px;
+        }
+        /* Contenedor principal */
+        .container {
+            padding: 20px 20px; /* Reducimos de 40px a 20px para que el contenido respire mejor */
+        }
+
+    /* TOPBAR */
+        .topbar {
+            padding: 10px 20px;
+            grid-template-columns: auto auto auto; /* Logo, Burger, Editor */
+            grid-template-columns: 1fr auto auto; 
+            z-index: 15;
+        }
+        /* Clase para mostrar el menú cuando se active */
+        .topbar nav.nav-active {
+            right: 0; /* Aparece suavemente desde la derecha */
+        }
+        .topbar nav {
+            position: fixed;
+            top: 0;
+            right: -100%; /* Oculto a la derecha */
+            width: 80%;
+            height: 100dvh;
+            background: var(--rick-black);
+
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 40px;
+            transition: right 0.4s ease;
+            box-shadow: -5px 0 15px rgba(0,0,0,0.5);
+        }
+        /* Burger menu*/
+        .burger-menu {
+            display: flex;
+            order: 1; /* El burger se queda en el medio/derecha */
+            z-index: 5; 
+            position: relative;   
+            flex-direction: column;
+            gap: 5px;
+
+            cursor: pointer;
+            padding: 10px;       
+        }
+        .burger-menu.open {
+            position: fixed; /* Sale de su sitio original */
+            top: 20px;       /* Ajusta la distancia desde arriba */
+            right: 20px;     /* Ajusta la distancia desde la derecha */
+            z-index: 10001;  /* Asegúrate de que esté por encima del nav (9999) */
+        }
+        .burger-menu .bar {
+            display: block;
+            width: 25px;
+            height: 3px;
+            background-color: var(--new-white);
+            margin: 0 auto; /* Por si acaso */
+            transition: all 0.3s ease;
+        }
+            /* Animación de la hamburguesa a "X" */
+            .burger-menu.open .bar:nth-child(1) {
+                transform: translateY(8px) rotate(45deg);
+            }
+            .burger-menu.open .bar:nth-child(2) {
+                opacity: 0; /* Efecto de salida lateral */
+                transform: translateX(-20px);
+            }
+            .burger-menu.open .bar:nth-child(3) {
+                transform: translateY(-8px) rotate(-45deg);
+            }
+        /* Botón acceso Modo Editor*/
+        .editor-btn {
+            width: 32px;
+            height: 32px;
+            margin-left: 10px;
+            order: 2; /* El editor se queda al final */
+        }
+        /* Botón salir del modo editor */
+        .logout-btn {
+            white-space: nowrap; /* Evita las dos líneas */
+            padding: 8px 10px;
+            border-radius: 15%;
+        }
+    /* PAGINA INDEX */
+        /* SECCIÓN HERO */
+            .hero {
+                grid-template-columns: 1fr;
+                padding: 40px 20px;
+                text-align: center;
+                gap: 30px;
+            }
+            .hero-text h2 {
+                font-size: 2.2rem; /* Tamaño más cómodo para móvil */
+            }
+            .hero-image-container {
+                margin: 20px auto 0; /* Centrado en móvil */
+                width: 260px;
+                height: 320px;
+            }
+            .current-cover {
+                width: 100%;
+                height: 350px;
+                margin: 20px 0;
+            }
+            .cover-placeholder {
+                margin: 0 auto; /* Centramos el placeholder de la recomendación */
+                width: 220px; /* Reducimos un poco el tamaño para que no ocupe toda la pantalla */
+                height: 310px;
+            }
+
+        /* SECCIÓN PROGRESO */
+            .progress-layout {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 15px; /* Reducimos el espacio entre ellas */
+                padding: 0 15px;
+            }
+            .card {
+                padding: 15px 10px; 
+                border-width: 3px;
+            }
+            big-number {
+                font-size: 2em; 
+                line-height: 1;
+            }
+            #mood-icon {
+                width: 120px; 
+                height: auto;
+                margin: 10px auto;
+                display: block; /* Necesario para que el margin auto funcione */
+            }
+            .progress-layout .card {
+                padding: 25px 20px;
+            }
+
+        /* SECCIÓN LECTURA ACTUAL */
+            .current-reading {
+                padding: 40px 20px;
+                gap: 20px;
+                overflow-x: auto; 
+            }
+            /* Layout de la lectura actual */
+            .current-reading-layout {
+                grid-template-columns: 1fr;
+                text-align: center;
+                gap: 15px;
+                min-width: 300px; 
+                width: 100%;
+                margin: 0 auto;
+            }
+            /* Portada del libro de la lectura actual */
+            .current-cover-wrapper {
+                margin: 0 auto; 
+                width: 240px;
+                height: 340px;
+                background-size: 100% 100%; /* Obligamos al marco a ajustarse al 100% del ancho y alto del padre */
+            }
+            .current-reading-title {
+                text-align: left;
+            }
+            .current-info h4 {
+                font-size: 1.8rem;
+            }
+
+        /* GRIDS DE LIBROS (Últimas lecturas y TBR en el index) */
+            .grid {
+                grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); /* Permitimos 2 columnas en la mayoría de móviles */
+                gap: 15px;
+            }
+            .book-title {
+                font-size: 0.9rem;
+            }
+
+    /* VENTANAS MODALES */
+        /* MODAL INFO LIBRO LEIDO (RESEÑA) */
+            #modal-info .info-modal-content {
+                width: 95%; /* Ocupa casi todo el ancho de la pantalla */
+                max-width: none; /* Eliminamos el límite de 600px de escritorio */
+                padding: 30px 20px; /* Reducimos el padding para ganar espacio de lectura */
+                max-height: 85vh; /* Altura máxima del 85% de la pantalla */
+                overflow-y: auto; /* Permite scroll vertical si la reseña es larga */
+                margin: 10px; /* Pequeño margen para que no toque los bordes del navegador */
+            }
+            /* Ajustamos los textos para que no se vean gigantes en pantallas pequeñas */
+            #modal-info #info-title {
+                font-size: 1.6rem;
+                line-height: 1.2;
+            }
+            #modal-info #info-author {
+                font-size: 1rem;
+                margin-bottom: 15px;
+            }
+            /* Ajuste para la cita (Quotes) en móvil */
+            #modal-info #info-quotes {
+                padding: 15px;
+                font-size: 1rem;
+            }
+
+        /* MODAL INFO LIBRO -> libros que están en TBR */
+            /* Contenedor principal del modal */
+            #book-modal .modal-content {
+                display: flex;
+                flex-direction: column;
+                position: relative;
+                max-width: 90%; /* No toca los bordes laterales */
+                max-height: 85vh; /* Altura máxima del 85% de la pantalla */
+                overflow-y: auto; /* ¡AQUÍ SE ACTIVA EL SCROLL! */
+                margin: auto; /* Centrado total */
+                padding: 0; /* Limpiamos padding para que la imagen llegue al borde */
+            }
+            /* Cuerpo del modal: Forzamos el apilado */
+            .modal-body {
+                display: flex;
+                flex-direction: column; /* Cambiamos grid por flex para mejor control */
+            }
+            /* El "marco" donde se ubida la portada del libro */
+            #book-modal .modal-cover {
+                width: 100%;
+                height: 380px; /* Aumentado de 220px para que se vea bien la portada */
+            }
+            /* La imagen de la portada */
+            .modal-cover img {
+                height: 100%;
+                width: 100%;
+                object-fit: cover;
+            }
+            /* Textos del modal */
+            .modal-info {
+                padding: 30px 20px;     
+                text-align: center;
+            }
+            /* Titulo del libro */
+            .modal-info h2 {
+                font-size: 1.5rem ; /* Título más pequeño */
+                margin-bottom: 5px;
+            }
+            /* Nombre del autor*/
+            .modal-info h3 {
+                font-size: 1rem ;   /* Autor más pequeño */
+            }
+            /* Sinopsis del libro */
+            .modal-description p {
+                font-size: 0.85rem;      
+                line-height: 1.6;
+                color: var(--rick-black);
+                text-align: left;
+            }
+            /* Generos del libro*/
+            .genre-tag {
+                font-size: 0.7rem;
+                padding: 4px 10px;
+                background: rgba(6, 54, 61, 0.1);
+                color: var(--rick-black);
+            }
+            /* Ocultamos las páginas del libro */
+            #book-modal .modal-footer {
+                display: none;
+            }
+            /* Botón de cierre del modal */
+            #book-modal .close-modal {
+                position: sticky; /* Para que cuando haya scroll, siempre esté visible */
+                top: 15px;
+                right: 15px;
+                align-self: flex-end; /* Lo empuja a la derecha */
+                margin-bottom: -40px; /* Truco para que no ocupe espacio real en el flujo */
+                z-index: 10;
+                background: rgba(240, 247, 248, 0.8); /* Fondo semi-transparente para que no se pierda con la foto */
+                width: 35px;
+                height: 35px;
+                min-width: 35px; /* Evita que se convierta en óvalo */
+                min-height: 35px;
+                padding: 0;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border-radius: 50%;
+            }
+
+        /* MODAL DE EDICIÓN RESEÑAS */
+            /* Forzamos el apilado vertical y permitimos scroll interno */
+            #modal-after .modal-content {
+                flex-direction: column;
+                max-height: 92vh; /* Evita que el modal se salga de la pantalla */
+                width: 95%;
+                overflow-y: auto; /* Permite navegar por el formulario si es largo */
+            }
+            #modal-after .modal-body {
+                display: flex;
+                flex-direction: column; /* Apila Portada arriba y Formulario abajo */
+                grid-template-columns: 1fr; /* Desactiva las columnas de escritorio */
+            }
+            /* Imagen de la portada del libro */
+            #modal-after .modal-cover {
+                width: 100%;
+                height: 220px; /* Altura fija para la portada en móvil */
+                min-height: 220px;
+            }
+            #modal-after .modal-cover img {
+                object-fit: cover;
+                width: 100%;
+                height: 100%;
+            }
+            /* Ajuste de textos y campos */
+            #modal-after .modal-info {
+                padding: 25px 20px; /* Menos espacio lateral para ganar área de escritura */
+            }
+            #after-title {
+                font-size: 1.4rem; /* Reducimos el tamaño para que no empuje todo hacia abajo */
+                line-height: 1.2;
+            }
+            .book-title-highlight {
+                font-size: 1.6rem;
+                display: inline; /* En móvil es mejor que fluya con el texto para ahorrar espacio */
+            }
+            /* Inputs más cómodos para dedos */
+            #modal-after input, 
+            #modal-after textarea {
+                font-size: 16px; /* Evita que iOS haga zoom automático al enfocar */
+                padding: 12px;
+            }
+
+    /* PAGINA BIBLIOTECA Y TBR */
+        .library-layout {
+            grid-template-columns: 1fr; /* El sidebar pasa arriba en pantallas pequeñas */
+        }
+        /* Seccion botones para filtros y categorias */
+        .mobile-actions-bar {
+            display: flex; /* APARECE EN MÓVIL */
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid rgba(6, 54, 61, 0.1);
+            border-bottom: 1px solid rgba(6, 54, 61, 0.1);
+            padding: 15px 0;
+            margin: 10px 0 0 0;
+            width: 100%;
+        }
+            /* Estilo para el texto "RECOMENDADO" y "FILTRAR" */
+            .minimal-select, 
+            .btn-filtrar-minimal {
+                background: transparent;
+                border: none;
+                font-family: "Aleo", sans-serif;
+                font-weight: 700;
+                font-size: 0.75rem;
+                color: var(--rick-black);
+                letter-spacing: 1.5px;
+                text-transform: uppercase;
+                cursor: pointer;
+                outline: none;
+            }
+            /* apariencia del desplegable de ordenación en móviles */
+            .minimal-select {
+                appearance: none;
+                -webkit-appearance: none; /* Quita la flecha nativa en iOS/Safari */
+                -moz-appearance: none;    /* Quita la flecha nativa en Firefox */
+                /* Añadimos una flecha limpia como fondo -> Al ser una imagen de fondo, el navegador la trata como parte del estilo del elemento y no permite que otras flechas nativasse "cuelen" en ese espaci*/
+                background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2212%22%20height%3D%2212%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%2306363D%22%20stroke-width%3D%223%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E");
+                background-repeat: no-repeat;
+                background-position: right 0 center;
+                background-size: 10px;
+                padding-right: 18px; /* Espacio para que el texto no pise la flecha */
+            }
+            .sort-control-mobile {
+                flex: 1;
+                position: relative;
+                text-align: left;
+            }
+            .btn-filtrar-minimal {
+                flex: 1;
+                text-align: right;
+            }
+            /* Línea divisoria central muy sutil */
+            .sort-control-mobile::before {
+                content: "";
+                position: absolute;
+                right: 0;
+                top: 50%;
+                transform: translateY(-50%);
+                height: 15px;
+                width: 1px;
+                background: rgba(6, 54, 61, 0.1);
+            }
+        /* Reglas del sidebar */
+            .sidebar {
+                position: fixed;
+                top: 0;
+                left: -100%; /* Escondido a la izquierda */
+                width: 280px;
+                height: 100vh; /* Ocupa toda la altura de la pantalla */
+                overflow-y: auto; /* Permite scroll interno si el contenido es largo */
+                display: block;
+                flex-wrap: wrap;
+                gap: 20px;
+                background: var(--new-white);
+                padding: 40px 20px;
+                transition: left 0.4s ease;
+                box-shadow: 5px 0 15px rgba(0,0,0,0.5);
+                z-index: 15;
+            }
+
+            /* Clase activa que pondremos con JS */
+                .sidebar.active {
+                    left: 0;
+                }
+            /* Botón de cierre del sidebar */
+                .close-sidebar {
+                    display: block;
+                    position: absolute;
+                    top: 10px;
+                    right: 20px;
+                    background: none;
+                    border: none;
+                    color: var(--rick-black);
+                    font-size: 1.5rem;
+                    cursor: pointer;
+                }
+            /* Titulo de la pagina*/
+                .page-title {
+                    font-size: 2rem;   /* Tamaño reducido para que quepa bien en móviles */
+                    margin-bottom: 20px;
+                }
+                .subtitle{
+                    font-size: 1rem;
+                    opacity: 0.8;
+                }
+
+/* PAGINA RECOMENDAR */
+    /* Estilo para el contenedor de recomendaciones */
+    .recommendation-layout {
+        margin-top: 5px;
+        grid-template-columns: 1fr; /* Apilado en móvil */
+        gap: 40px;
+    }
+    .custom-form {
+        padding: 20px; /* Reducimos el padding interno para ganar espacio */
+    }
+    .section-small-title {
+        font-size: 1.1rem; /* Ajustamos ligeramente el título de la sección para móvil */
+        margin-bottom: 15px;
+    }
+    .recom-item {
+        padding: 20px; /* Reducimos un poco el padding de las tarjetas de recomendación */
+    }
+}

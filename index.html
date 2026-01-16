@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BookLog</title>
+    <link rel="stylesheet" href="css/estilos.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Aleo:wght@100..900&display=swap" rel="stylesheet">
+    <script defer src="js/funciones.js"></script>
+    <script defer src="js/data.js"></script>
+</head>
+<body>
+
+    <header class="topbar">
+        <a href="index.html" class="logo">
+            <img src="img/logo-blanco.png" alt="BookLog">
+        </a>
+
+        <div class="menu-container">
+            <button class="burger-menu" id="burger-menu" aria-label="Abrir menú">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </button>
+
+            <nav id="nav-menu">
+                <a href="index.html">Inicio</a>
+                <a href="biblioteca.html">Biblioteca</a>
+                <a href="tbr.html">TBR</a>
+                <a href="recomendar.html">Recomendar</a>
+            </nav>
+        </div>
+
+        <div class="header-actions">
+            
+            <button class="editor-btn" title="Entrar como editor">
+                <svg viewBox="0 0 24 24" width="20" height="20">
+                    <circle cx="12" cy="8" r="4" />
+                    <path d="M4 20c0-4 4-6 8-6s8 2 8 6" />
+                </svg>
+            </button>
+
+            <button id="logout-btn" class="logout-btn" title="Cerrar modo editor"> Salir </button>
+        </div>
+    </header>
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="hero-text">
+            <h2>Hoy es un buen día para empezar un libro</h2>
+            <p>Del caos de tu lista de pendientes, aparece una historia que puede cambiar tu día.</p>
+            <button id="btn-recomendar">¡Recomiéndame un libro!</button>
+        </div>
+
+        <div class="hero-image-container">
+            <img id="hero-book-cover" src="img/hero-cover.jpg" alt="Portada recomendada">
+            
+            <img class="hero-frame" src="img/hero-marco.png" alt="Marco decorativo">
+        </div>
+    </section>
+
+    <!-- PROGRESO -->
+    <section class="progress">
+        <div class="container progress-layout">
+            <div class="card">
+                <h3>Libros leídos</h3>
+                <span class="big-number">2</span>
+            </div>
+            <div class="card">
+                <h3>Mood lector</h3>
+                <img id="mood-icon" src="img/fantasia.png" alt="Icono de género dominante">
+                <p id="mood-text">Analizando tus lecturas...</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- LECTURA ACTUAL -->
+    <section class="current-reading">
+        <div class="container current-reading-layout">
+            <h3 class="current-reading-title">Leyendo ahora</h3>
+            
+            <div class="current-cover-wrapper" id="current-book-cover"></div>
+
+            <div class="current-info">
+                <h2 id="current-book-title">Cargando título...</h2>
+                
+                <p class="book-metadata"><strong>Género:</strong> <span id="current-book-genre">...</span></p>
+
+                <div class="reading-progress-container">
+                    <div class="progress-bar-bg">
+                        <div id="progress-bar-fill" class="progress-bar-fill" style="width: 0%;"></div>
+                    </div>
+                    <span id="progress-stats" class="progress-stats">Página 0 de 0 (0%)</span>
+                </div>
+
+                <div class="synopsis-container">
+                    <strong class="label-presence">Sinopsis:</strong>
+                    <p id="current-book-synopsis">...</p>
+                </div>
+
+                <div class="admin-controls">
+                    <button class="btn-admin btn-update" onclick="abrirModalPagina()">
+                        <i class="fas fa-bookmark"></i>Actualizar página
+                    </button>
+                    <button class="btn-admin btn-finish" onclick="marcarComoTerminado()">
+                        <i class="fas fa-check-circle"></i>¡Terminado!
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ÚLTIMAS LECTURAS -->
+    <section class="last-reads">
+        <div class="container">
+            <h3><a href="biblioteca.html" class="section-link">Últimas lecturas</a></h3>
+            <div id="grid-ultimas-lecturas" class="grid">
+                </div>
+        </div>
+    </section>
+
+    <!-- TBR -->
+    <section class="tbr">
+        <div class="container">
+            <h3><a href="tbr.html" class="section-link">TBR</a></h3>
+            <div id="grid-tbr-home" class="grid">
+                </div>
+        </div>
+    </section>
+
+<!-- MODAL ACCESO MODO EDITOR -->
+    <div id="modal-editor" class="modal">
+    <div class="modal-content">
+        <button class="close-modal" id="close-login">✕</button>
+        <h3>Acceso Editor</h3>
+        <p>Introduce la clave para gestionar tu diario.</p>
+        <form id="login-form">
+            <input type="password" id="editor-key" placeholder="Contraseña de acceso" required>
+            <button type="submit" class="submit-btn">Entrar</button>
+        </form>
+    </div>
+</div>
+<!-- MODAL LIBRO LEIDO -> introducir reseña -->
+<div id="modal-after" class="modal">
+    <div class="modal-content admin-modal-content">
+        <button class="close-modal" id="close-after">&times;</button>
+
+        <div class="modal-body">
+            <div class="modal-cover">
+                <img id="after-cover-img" src="" alt="Portada del libro">
+            </div>
+
+        <div class="modal-info">
+                <h3 id="after-title">Cuéntame qué tal la experiencia</h3>
+                <p id="after-author" class="admin-subtitle"></p>
+        
+            <form id="after-form">
+                <div class="input-group">
+                    <label for="rating">¿Cuántas estrellas le das?</label>
+                    <input type="number" id="rating" min="1" max="5" value="5" required>
+                </div>
+            
+                <div class="input-group">
+                    <label for="comment">Tus vibes sobre el libro (Thoughts)</label>
+                    <textarea id="comment" maxlength="500" placeholder="¿Qué te ha parecido?" rows="3"></textarea>
+                    <small class="char-count">Máx. 500 caracteres</small>
+                </div>
+
+                <div class="input-group">
+                    <label for="quotes">Citas (Quotes)</label>
+                    <textarea id="quotes" maxlength="500" placeholder="Esa frase que te dejó en el suelo..." rows="3"></textarea>
+                    <small class="char-count">Máx. 500 caracteres</small>
+                </div>
+                
+                <button type="submit" class="submit-btn">Mover a mi estantería</button>
+            </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- MODAL INFO LIBRO LEIDO -> ver reseña de usuario -->
+<div id="modal-info" class="modal">
+    <div class="modal-content info-modal-content">
+        <button class="close-modal" id="close-info">&times;</button>
+        <h3 id="info-title">Reseña del libro</h3>
+        <p id="info-author"></p>
+        <div class="info-body">
+            <div id="info-rating" class="user-rating"></div>
+            <div class="info-section">
+                <strong>Mis pensamientos:</strong>
+                <p id="info-comment"></p>
+            </div>
+            <div class="info-section">
+                <strong>Frases favoritas:</strong>
+                <p id="info-quotes"></p>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- MODAL INFO LIBRO (TBR) -->
+<div id="book-modal" class="modal">
+    <div class="modal-content">
+        <button class="close-modal" onclick="cerrarModal()">&times;</button>
+        
+        <div class="modal-body">
+            <div class="modal-cover">
+                <img id="modal-cover-img" src="" alt="Portada del libro">
+            </div>
+            
+            <div class="modal-info">
+                <h2 id="modal-title">Título del Libro</h2>
+                <h3 id="modal-author">Autor</h3>
+                
+                <div class="modal-tags">
+                    <span class="status-badge" id="modal-status">Estado</span>
+                    <div id="modal-genres" class="genres-container"></div>
+                </div>
+
+                <div class="modal-description">
+                    <h4>Sinopsis</h4>
+                    <p id="modal-synopsis">Aquí va la sinopsis...</p>
+                </div>
+
+                <div class="modal-footer">
+                    <p><strong>Páginas:</strong> <span id="modal-pages">0/0</span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

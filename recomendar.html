@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recomendaciones | BookLog</title>
+    <link rel="stylesheet" href="css/estilos.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Aleo:wght@100..900&display=swap" rel="stylesheet">
+    <script defer src="js/funciones.js"></script>
+    <script defer src="js/data.js"></script>
+</head>
+<body>
+
+    <header class="topbar">
+        <a href="index.html" class="logo">
+            <img src="img/logo-blanco.png" alt="BookLog">
+        </a>
+
+        <div class="menu-container">
+            <button class="burger-menu" id="burger-menu" aria-label="Abrir menú">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </button>
+
+            <nav id="nav-menu">
+                <a href="index.html">Inicio</a>
+                <a href="biblioteca.html">Biblioteca</a>
+                <a href="tbr.html">TBR</a>
+                <a href="recomendar.html">Recomendar</a>
+            </nav>
+        </div>
+
+        <div class="header-actions">
+            
+            <button class="editor-btn" title="Entrar como editor">
+                <svg viewBox="0 0 24 24" width="20" height="20">
+                    <circle cx="12" cy="8" r="4" />
+                    <path d="M4 20c0-4 4-6 8-6s8 2 8 6" />
+                </svg>
+            </button>
+
+            <button id="logout-btn" class="logout-btn" title="Cerrar modo editor"> Salir </button>
+        </div>
+    </header>
+
+    <main class="container simple-page-layout">
+    <h1 class="page-title">Recomendar</h1>
+    <p class="subtitle">¿Tienes algún libro que me volará la cabeza? Déjame tu recomendación aquí abajo.</p>
+
+    <div class="recommendation-layout">
+        <section class="form-container">
+            <h3 class="section-small-title">Tu Sugerencia</h3>
+            <form id="recommendation-form" class="custom-form">
+                <div class="input-group">
+                    <label for="recom-title">Título del libro</label>
+                    <input type="text" id="recom-title" placeholder="Ej: Los siete maridos de Evelyn Hugo" required>
+                </div>
+                <div class="input-group">
+                    <label for="recom-author">Autor/a</label>
+                    <input type="text" id="recom-author" placeholder="Taylor Jenkins Reid" required>
+                </div>
+                <div class="input-group">
+                    <label for="recom-why">¿Por qué lo recomiendas?</label>
+                    <textarea id="recom-why" rows="4" placeholder="Me encantó por su narrativa y..." required></textarea>
+                </div>
+                <button type="submit" class="submit-btn btn-enviar-recom">Enviar recomendación</button>
+            </form>
+        </section>
+
+        <section class="suggestions-container">
+            <h3 class="section-small-title">Últimas recomendaciones</h3>
+            <div id="recommendations-list" class="recom-grid">
+                <!-- Las recomendaciones se cargarán aquí dinámicamente -->
+                <!-- Simulación de recomendaciones -->
+                <div class="recom-item">
+                    <strong>Los siete maridos de Evelyn Hugo</strong>
+                    <p>Una historia fascinante sobre la fama, el amor y los secretos de Hollywood. No pude soltarlo hasta el final.</p>
+                    <span class="recom-author">Recomendado por: Elena G.</span>
+                </div>
+
+                <div class="recom-item">
+                    <strong>Alas de Sangre</strong>
+                    <p>Si te gusta la fantasía con dragones y un romance intenso, este es tu libro. La ambientación es increíble.</p>
+                    <span class="recom-author">Recomendado por: Marc R.</span>
+                </div>
+
+                <div class="recom-item">
+                    <strong>Circe</strong>
+                    <p>Una reimaginación de la mitología griega preciosa. La prosa de la autora es pura magia.</p>
+                    <span class="recom-author">Recomendado por: Paula V.</span>
+                </div>
+
+            </div>
+                </div>
+        </section>
+    </div>
+</main>
+    
+    <div id="modal-editor" class="modal">
+    <div class="modal-content">
+        <button class="close-modal" id="close-login">✕</button>
+        <h3>Acceso Editor</h3>
+        <p>Introduce la clave para gestionar tu diario.</p>
+        <form id="login-form">
+            <input type="password" id="editor-key" placeholder="Contraseña de acceso" required>
+            <button type="submit" class="submit-btn">Entrar</button>
+        </form>
+    </div>
+</div>
+
+</body>
+</html>

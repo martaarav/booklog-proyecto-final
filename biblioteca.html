@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Biblioteca | BookLog</title>
+    <link rel="stylesheet" href="css/estilos.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Aleo:wght@100..900&display=swap" rel="stylesheet">
+    <script defer src="js/funciones.js"></script>
+    <script defer src="js/data.js"></script>
+</head>
+<body>
+
+    <header class="topbar">
+        <a href="index.html" class="logo">
+            <img src="img/logo-blanco.png" alt="BookLog">
+        </a>
+
+        <div class="menu-container">
+            <button class="burger-menu" id="burger-menu" aria-label="Abrir menú">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </button>
+
+            <nav id="nav-menu">
+                <a href="index.html">Inicio</a>
+                <a href="biblioteca.html">Biblioteca</a>
+                <a href="tbr.html">TBR</a>
+                <a href="recomendar.html">Recomendar</a>
+            </nav>
+        </div>
+
+        <div class="header-actions">
+            
+            <button class="editor-btn" title="Entrar como editor">
+                <svg viewBox="0 0 24 24" width="20" height="20">
+                    <circle cx="12" cy="8" r="4" />
+                    <path d="M4 20c0-4 4-6 8-6s8 2 8 6" />
+                </svg>
+            </button>
+
+            <button id="logout-btn" class="logout-btn" title="Cerrar modo editor">Salir</button>
+        </div>
+    </header>
+
+    <main class="library-layout container">
+
+        <aside class="sidebar" id="sidebar-filters">
+            <h3 class="sidebar-main-title">Filtros y Búsqueda</h3>
+
+            <button id="close-filters" class="close-sidebar">✕</button>
+
+            <div class="search-filters">
+                <div class="filter-group">
+                    <input type="text" id="search-input" placeholder="🔍 Buscar por título o autor...">
+                </div>
+                
+                <div class="filter-group">
+                    <select id="sort-select">
+                        <option value="default">Ordenar por...</option>
+                        <option value="rating-desc">Mejor valorados</option>
+                        <option value="rating-asc">Peor valorados</option>
+                        <option value="title-az">Título (A-Z)</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="filter-group">
+                <h4>Puntuación</h4>
+                <ul class="filter-list">
+                    <li><label><input type="checkbox" value="5"> ★ 5</label></li>
+                    <li><label><input type="checkbox" value="4"> ★ 4</label></li>
+                    <li><label><input type="checkbox" value="3"> ★ 3</label></li>
+                    <li><label><input type="checkbox" value="2"> ★ 2</label></li>
+                    <li><label><input type="checkbox" value="1"> ★ 1</label></li>
+                </ul>
+            </div>
+            <div class="filter-group">
+                <h4>Géneros</h4>
+                <ul class="filter-list" id="filter-genres">
+                    <li><label><input type="checkbox" value="Fantasía"> Fantasía</label></li>
+                    <li><label><input type="checkbox" value="Romance"> Romance</label></li>
+                    <li><label><input type="checkbox" value="Ficción Histórica"> Histórica</label></li>
+                    <li><label><input type="checkbox" value="Novela Gráfica"> Novela Gráfica</label></li>
+                    <li><label><input type="checkbox" value="Ciencia ficción"> Ciencia ficción</label></li>
+                    <li><label><input type="checkbox" value="Clásicos"> Clásicos</label></li>
+                    <li><label><input type="checkbox" value="Thriller"> Thriller</label></li>
+                    <li><label><input type="checkbox" value="Contemporánea"> Contemporánea</label></li>
+                    <li><label><input type="checkbox" value="No Ficción"> No Ficción</label></li>
+                </ul>
+            </div>
+        </aside>
+
+        <section class="library-content">
+            <h1 class="page-title">Mi biblioteca</h1>
+
+            <div class="mobile-actions-bar">
+                <div class="sort-control-mobile">
+                    <select id="sort-select-mobile" class="minimal-select">
+                        <option value="rating-desc">MEJOR VALORADOS</option>
+                        <option value="title-az">TÍTULO (A-Z)</option>
+                        <option value="date-new">MÁS RECIENTES</option>
+                    </select>
+                </div>
+                <button id="open-filters-mobile" class="btn-filtrar-minimal">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+                    </svg>
+                    <span>Filtros</span>
+                </button>
+            </div>
+
+            <div class="grid" id="grid-biblioteca">
+            </div>
+        </section>
+
+    </main>
+
+    <div id="modal-editor" class="modal">
+    <div class="modal-content">
+        <button class="close-modal" id="close-login">✕</button>
+        <h3>Acceso Editor</h3>
+        <p>Introduce la clave para gestionar tu diario.</p>
+        <form id="login-form">
+            <input type="password" id="editor-key" placeholder="Contraseña de acceso" required>
+            <button type="submit" class="submit-btn">Entrar</button>
+        </form>
+    </div>
+</div>
+
+<div id="modal-after" class="modal">
+    <div class="modal-content admin-modal-content">
+        <button class="close-modal" id="close-after">&times;</button>
+
+        <div class="modal-body">
+            <div class="modal-cover">
+                <img id="after-cover-img" src="" alt="Portada del libro">
+            </div>
+
+            <div class="modal-info">
+                <h3 id="after-title">Cuéntame qué tal la experiencia</h3>
+                <p id="after-author" class="admin-subtitle"></p>
+        
+                <form id="after-form">
+                    <div class="input-group">
+                        <label for="rating">¿Cuántas estrellas le das?</label>
+                        <input type="number" id="rating" min="1" max="5" value="5" required>
+                    </div>
+                
+                    <div class="input-group">
+                        <label for="comment">Tus vibes sobre el libro (Thoughts)</label>
+                        <textarea id="comment" maxlength="500" placeholder="¿Qué te ha parecido?" rows="3"></textarea>
+                        <small class="char-count">Máx. 500 caracteres</small>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="quotes">Citas (Quotes)</label>
+                        <textarea id="quotes" maxlength="500" placeholder="Esa frase que te dejó en el suelo..." rows="3"></textarea>
+                        <small class="char-count">Máx. 500 caracteres</small>
+                    </div>
+                    
+                    <button type="submit" class="submit-btn">Mover a mi estantería</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="modal-info" class="modal">
+    <div class="modal-content info-modal-content">
+        <button class="close-modal" id="close-info">&times;</button>
+        <h3 id="info-title">Reseña del libro</h3>
+        <p id="info-author" style="opacity: 0.7; font-style: italic; margin-bottom: 20px;"></p>
+        
+        <div class="info-body">
+            <div id="info-rating" class="user-rating" style="font-size: 1.5rem; margin-bottom: 20px;"></div>
+            
+            <div class="info-section" style="margin-bottom: 20px; text-align: left;">
+                <strong style="display: block; color: var(--royal-plum); margin-bottom: 5px;">Mis pensamientos:</strong>
+                <p id="info-comment" style="line-height: 1.5; color: var(--blue-noir);"></p>
+            </div>
+
+            <div class="info-section" style="text-align: left;">
+                <strong style="display: block; color: var(--royal-plum); margin-bottom: 5px;">Frases favoritas:</strong>
+                <p id="info-quotes" style="font-style: italic; border-left: 3px solid var(--celadon); padding-left: 15px; color: var(--blue-noir);"></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="book-modal" class="modal">
+    <div class="modal-content">
+        <button class="close-modal" onclick="cerrarModal()">&times;</button>
+        
+        <div class="modal-body">
+            <div class="modal-cover">
+                <img id="modal-cover-img" src="" alt="Portada del libro">
+            </div>
+            
+            <div class="modal-info">
+                <h2 id="modal-title">Título del Libro</h2>
+                <h3 id="modal-author">Autor</h3>
+                
+                <div class="modal-tags">
+                    <span class="status-badge" id="modal-status">Estado</span>
+                    <div id="modal-genres" class="genres-container"></div>
+                </div>
+
+                <div class="modal-description">
+                    <h4>Sinopsis</h4>
+                    <p id="modal-synopsis">Aquí va la sinopsis...</p>
+                </div>
+
+                <div class="modal-footer">
+                    <p><strong>Páginas:</strong> <span id="modal-pages">0/0</span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
