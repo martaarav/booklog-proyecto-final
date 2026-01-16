@@ -400,6 +400,35 @@ function prepararEdicion(id) {
 }
 
 // funcion para generar recomendacion aleatoria en el hero de la home
+function generarRecomendacionAleatoria(librosDisponibles) {
+    const tituloHero = document.querySelector('.hero-text h2');
+    const imgPortada = document.getElementById('hero-book-cover');
+
+    // Verificamos que los elementos existan y haya libros para recomendar
+    if (!tituloHero || !imgPortada || librosDisponibles.length === 0) {
+        console.warn("No hay libros disponibles para recomendar o faltan elementos en el DOM.");
+        return;
+    }
+
+    // 1. Reiniciamos la animación
+    imgPortada.classList.remove('animar-portada');
+    void imgPortada.offsetWidth; // Truco para forzar el reinicio de la animación
+
+    // 2. Elegimos un libro al azar de la lista filtrada
+    const indiceAleatorio = Math.floor(Math.random() * librosDisponibles.length);
+    const libroElegido = librosDisponibles[indiceAleatorio];
+
+    // 3. Actualizamos la interfaz
+    tituloHero.innerText = `¿Qué tal si hoy empiezas "${libroElegido.title}"?`;
+    imgPortada.src = libroElegido.cover;
+    imgPortada.alt = `Portada de ${libroElegido.title}`;
+
+    // 4. Disparamos la animación
+    imgPortada.classList.add('animar-portada');
+}
+
+
+
 function filtrarYOrdenarLibros(listaOriginal) {
     const textoBusqueda = document.getElementById('search-input')?.value.toLowerCase() || "";
     
