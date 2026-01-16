@@ -426,45 +426,48 @@ function generarRecomendacionAleatoria(librosTBR) {
 }
 
 //funcion para filtrar y ordenar libros segun los controles de la UI
-
 function filtrarYOrdenarLibros(listaOriginal) {
+    // 1. CAPTURA DE VALORES DE LA UI (Buscador y Orden)
     const textoBusqueda = document.getElementById('search-input')?.value.toLowerCase() || "";
     
-    // Intentamos obtener el valor del select de escritorio
-    const selectEscritorio = document.getElementById('sort-select');
-    // Intentamos obtener el valor del select móvil
-    const selectMobile = document.getElementById('sort-select-mobile');
+    // Captura el criterio de orden: prioriza el de escritorio, si no existe usa el de móvil
+    const criterioOrden = document.getElementById('sort-select')?.value || 
+                          document.getElementById('sort-select-mobile')?.value || 
+                          "default";
     
-    // Usamos el valor del móvil si el de escritorio no existe o no tiene valor, 
-    // priorizando el que el usuario haya interactuado según la vista.
-    let criterioOrden = "default";
-    
-    if (window.innerWidth <= 768 && selectMobile) {
-        criterioOrden = selectMobile.value;
-    } else if (selectEscritorio) {
-        criterioOrden = selectEscritorio.value;
-    }
-    
-    // Obtenemos todos los géneros que el usuario ha marcado
-    const checkboxes = document.querySelectorAll('#filter-genres input[type="checkbox"]:checked');
-    const generosSeleccionados = Array.from(checkboxes).map(cb => cb.value);
+    // 2. CAPTURA DE FILTROS SELECCIONADOS (Géneros y Puntuación)
+    const checksGeneros = document.querySelectorAll('#filter-genres input[type="checkbox"]:checked');
+    const generosSeleccionados = Array.from(checksGeneros).map(cb => cb.value);
 
-    // 1. FILTRAR POR GÉNERO (Selección múltiple)
+    const checksRatings = document.querySelectorAll('#filter-ratings input[type="checkbox"]:checked');
+    const ratingsSeleccionadas = Array.from(checksRatings).map(cb => cb.value);
+
+    // 3. LÓGICA DE FILTRADO
     let filtrados = listaOriginal.filter(libro => {
-        if (generosSeleccionados.length === 0) return true; // Si no hay nada marcado, mostramos todo
         
-        // Comprobamos si alguno de los géneros del libro está en nuestra lista de seleccionados
-        // Usamos .some() porque "libro.genre" es un array en tu JSON
-        return libro.genre.some(g => generosSeleccionados.includes(g));
+        // Filtro de Texto (Título o Autor)
+        const cumpleTexto = libro.title.toLowerCase().includes(textoBusqueda) || 
+                            libro.author.toLowerCase().includes(textoBusqueda);
+
+        // Filtro de Géneros (Si no hay nada marcado, pasan todos)
+        const cumpleGenero = generosSeleccionados.length === 0 || 
+                             libro.genre.some(g => generosSeleccionados.includes(g));
+
+        // Filtro de Puntuación (Diferenciando por Biblioteca o TBR)
+        let cumpleRating = true;
+        if (ratingsSeleccionadas.length > 0) {
+            // Biblioteca: usa user_rating | TBR: usa goodreads redondeado hacia abajo
+            const nota = libro.status === "leido" 
+                ? Math.floor(libro.user_rating || 0) 
+                : Math.floor(parseFloat(libro.goodreads) || 0);
+            
+            cumpleRating = ratingsSeleccionadas.includes(nota.toString());
+        }
+
+        return cumpleTexto && cumpleGenero && cumpleRating;
     });
 
-    // 2. FILTRAR POR TEXTO (Buscador)
-    filtrados = filtrados.filter(libro => {
-        return libro.title.toLowerCase().includes(textoBusqueda) || 
-            libro.author.toLowerCase().includes(textoBusqueda);
-    });
-
-    // 3. ORDENAR (Mantenemos tu lógica actual)
+    // 4. LÓGICA DE ORDENACIÓN
     filtrados.sort((a, b) => {
         const notaA = a.user_rating || parseFloat(a.goodreads) || 0;
         const notaB = b.user_rating || parseFloat(b.goodreads) || 0;
@@ -483,7 +486,6 @@ function filtrarYOrdenarLibros(listaOriginal) {
 
     return filtrados;
 }
-
 //ESCUCHADORES DE EVENTOS
 
 // TOPBAR - MENÚ HAMBURGUESA Y FILTROS
