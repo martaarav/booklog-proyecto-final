@@ -515,7 +515,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // BIBLIOTECA - GESTIÓN DEL SIDEBAR DE FILTROS EN MÓVIL
 document.addEventListener('DOMContentLoaded', () => {
-    const btnOpen = document.getElementById('open-filters');
+    const btnOpen = document.getElementById('open-filters-mobile');
     const btnClose = document.getElementById('close-filters');
     const sidebar = document.getElementById('sidebar-filters');
 
