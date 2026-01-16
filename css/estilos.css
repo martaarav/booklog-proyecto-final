@@ -66,7 +66,7 @@ body {
         top: 0;
         z-index: 10; /* Siempre por encima del resto de elementos para que se vea */
         box-shadow: 0 2px 10px rgba(0,0,0,0.3); /* Sombra sutil para dar profundidad al hacer scroll */
-        background: var(--orange);
+        background: var(--rick-black);
         backdrop-filter: blur(10px); /* Desenfoque tipo cristal */
     }
     .menu-container {
@@ -1221,6 +1221,7 @@ body.is-editor .admin-controls {
             padding: 10px 20px;
             grid-template-columns: auto auto auto; /* Logo, Burger, Editor */
             grid-template-columns: 1fr auto auto; 
+            backdrop-filter: none;
             z-index: 15;
         }
         /* Clase para mostrar el menú cuando se active */
@@ -1234,7 +1235,6 @@ body.is-editor .admin-controls {
             width: 80%;
             height: 100dvh;
             background: var(--rick-black);
-
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -1242,6 +1242,7 @@ body.is-editor .admin-controls {
             gap: 40px;
             transition: right 0.4s ease;
             box-shadow: -5px 0 15px rgba(0,0,0,0.5);
+            z-index: 16;
         }
         /* Burger menu*/
         .burger-menu {
@@ -1259,7 +1260,7 @@ body.is-editor .admin-controls {
             position: fixed; /* Sale de su sitio original */
             top: 20px;       /* Ajusta la distancia desde arriba */
             right: 20px;     /* Ajusta la distancia desde la derecha */
-            z-index: 10001;  /* Asegúrate de que esté por encima del nav (9999) */
+            z-index: 20;  /* Asegúrate de que esté por encima del nav (9999) */
         }
         .burger-menu .bar {
             display: block;
