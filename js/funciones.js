@@ -429,7 +429,21 @@ function generarRecomendacionAleatoria(librosTBR) {
 
 function filtrarYOrdenarLibros(listaOriginal) {
     const textoBusqueda = document.getElementById('search-input')?.value.toLowerCase() || "";
-    const criterioOrden = document.getElementById('sort-select')?.value || "default";
+    
+    // Intentamos obtener el valor del select de escritorio
+    const selectEscritorio = document.getElementById('sort-select');
+    // Intentamos obtener el valor del select móvil
+    const selectMobile = document.getElementById('sort-select-mobile');
+    
+    // Usamos el valor del móvil si el de escritorio no existe o no tiene valor, 
+    // priorizando el que el usuario haya interactuado según la vista.
+    let criterioOrden = "default";
+    
+    if (window.innerWidth <= 768 && selectMobile) {
+        criterioOrden = selectMobile.value;
+    } else if (selectEscritorio) {
+        criterioOrden = selectEscritorio.value;
+    }
     
     // Obtenemos todos los géneros que el usuario ha marcado
     const checkboxes = document.querySelectorAll('#filter-genres input[type="checkbox"]:checked');
@@ -479,6 +493,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     const inputBusqueda = document.getElementById('search-input');
     const selectOrden = document.getElementById('sort-select');
+    const selectOrdenMobile = document.getElementById('sort-select-mobile');
 
     // Cada vez que cambien, avisamos a data.js para que refresque
     if (inputBusqueda) {
@@ -486,10 +501,17 @@ document.addEventListener('DOMContentLoaded', () => {
             gestionarRenderizadoSegunPagina(); // Avisamos a data.js que refresque
         });
     }
-
+    // Escuchador para escritorio
     if (selectOrden) {
         selectOrden.addEventListener('change', () => {
             gestionarRenderizadoSegunPagina(); // Avisamos a data.js que refresque
+        });
+    }
+
+    // Escuchador para móvil (Añade este bloque)
+    if (selectOrdenMobile) {
+        selectOrdenMobile.addEventListener('change', () => {
+            gestionarRenderizadoSegunPagina();
         });
     }
 
@@ -537,7 +559,14 @@ document.addEventListener('DOMContentLoaded', () => {
         containerGeneros.addEventListener('change', () => {
             gestionarRenderizadoSegunPagina(); // Refrescamos la lista al marcar/desmarcar
         });
-}
+    }
+    // Escuchar los checkboxes de PUNTUACIÓN
+    const containerRatings = document.getElementById('filter-ratings');
+    if (containerRatings) {
+        containerRatings.addEventListener('change', () => {
+            gestionarRenderizadoSegunPagina();
+        });
+    }
 });
 
 // MODO EDITOR - GESTIÓN DEL MODAL DE ACCESO
