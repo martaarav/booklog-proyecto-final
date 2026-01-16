@@ -1243,13 +1243,13 @@ body.is-editor .admin-controls {
             gap: 40px;
             transition: right 0.4s ease;
             box-shadow: -5px 0 15px rgba(0,0,0,0.5);
-            z-index: 30;
+            z-index: 23;
         }
         /* Burger menu*/
         .burger-menu {
             display: flex;
             order: 1; /* El burger se queda en el medio/derecha */
-            z-index: 5; 
+            z-index: 21; 
             position: relative;   
             flex-direction: column;
             gap: 5px;
@@ -1261,7 +1261,7 @@ body.is-editor .admin-controls {
             position: fixed; /* Sale de su sitio original */
             top: 20px;       /* Ajusta la distancia desde arriba */
             right: 20px;     /* Ajusta la distancia desde la derecha */
-            z-index: 20;  /* Asegúrate de que esté por encima del nav (9999) */
+            z-index: 24;  /* Asegúrate de que esté por encima del nav (9999) */
         }
         .burger-menu .bar {
             display: block;
@@ -1608,7 +1608,7 @@ body.is-editor .admin-controls {
                 padding: 40px 20px;
                 transition: left 0.4s ease;
                 box-shadow: 5px 0 15px rgba(0,0,0,0.5);
-                z-index: 15;
+                z-index: 22;
             }
 
             /* Clase activa que pondremos con JS */
