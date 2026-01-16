@@ -259,7 +259,7 @@ window.onclick = function(event) {
 }
 
 // MODAL INFO LIBRO - Escuchamos el clic en el botón con id "close-info"
-document.getElementById('close-info').addEventListener('click', () => {
+document.getElementById('close-info')?.addEventListener('click', () => {
     document.getElementById('modal-info').classList.remove('active');
 });
 
@@ -280,9 +280,12 @@ window.addEventListener('click', (e) => {
             cerrarModal();
         }
 
-        // 3. Limpieza específica para el modal de edición
+        // 3. Limpieza específica para el modal de edición (Solo si existe)
         if (e.target.id === 'modal-after') {
-            document.getElementById('after-title').innerText = "Cuéntame qué tal la experiencia";
+            const tituloAfter = document.getElementById('after-title');
+            if (tituloAfter) { // Verificamos que el elemento no sea null
+                tituloAfter.innerText = "Cuéntame qué tal la experiencia";
+            }
         }
         
         console.log("Modal cerrado por clic exterior");
