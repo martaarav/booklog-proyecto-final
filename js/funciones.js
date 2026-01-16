@@ -400,74 +400,43 @@ function prepararEdicion(id) {
 }
 
 // funcion para generar recomendacion aleatoria en el hero de la home
-
-function generarRecomendacionAleatoria(librosTBR) {
-    const tituloHero = document.querySelector('.hero-text h2');
-    const imgPortada = document.getElementById('hero-book-cover');
-
-    // Verificamos que los elementos existan y haya libros en el TBR
-    if (!tituloHero || !imgPortada || librosTBR.length === 0) return;
-
-    // 1. Reiniciamos la animación (quitamos la clase y forzamos el refresco)
-    imgPortada.classList.remove('animar-portada');
-    void imgPortada.offsetWidth; // Truco técnico para que el navegador reinicie la animación
-
-    // 2. Elegimos un libro al azar de la lista
-    const indiceAleatorio = Math.floor(Math.random() * librosTBR.length);
-    const libroElegido = librosTBR[indiceAleatorio];
-
-    // 3. Actualizamos los datos
-    tituloHero.innerText = `¿Qué tal si hoy empiezas "${libroElegido.title}"?`;
-    imgPortada.src = libroElegido.cover;
-    imgPortada.alt = `Portada de ${libroElegido.title}`;
-
-    // 4. Disparamos la animación de la portada
-    imgPortada.classList.add('animar-portada');
-}
-
-//funcion para filtrar y ordenar libros segun los controles de la UI
 function filtrarYOrdenarLibros(listaOriginal) {
-    // 1. CAPTURA DE VALORES DE LA UI (Buscador y Orden)
     const textoBusqueda = document.getElementById('search-input')?.value.toLowerCase() || "";
     
-    // Captura el criterio de orden: prioriza el de escritorio, si no existe usa el de móvil
-    const criterioOrden = document.getElementById('sort-select')?.value || 
-                          document.getElementById('sort-select-mobile')?.value || 
-                          "default";
-    
-    // 2. CAPTURA DE FILTROS SELECCIONADOS (Géneros y Puntuación)
-    const checksGeneros = document.querySelectorAll('#filter-genres input[type="checkbox"]:checked');
-    const generosSeleccionados = Array.from(checksGeneros).map(cb => cb.value);
+    // Captura del orden: Priorizamos el móvil en pantallas pequeñas
+    const selectDk = document.getElementById('sort-select');
+    const selectMb = document.getElementById('sort-select-mobile');
+    let criterioOrden = "default";
 
-    const checksRatings = document.querySelectorAll('#filter-ratings input[type="checkbox"]:checked');
-    const ratingsSeleccionadas = Array.from(checksRatings).map(cb => cb.value);
+    if (window.innerWidth <= 768 && selectMb) {
+        criterioOrden = selectMb.value;
+    } else if (selectDk) {
+        criterioOrden = selectDk.value;
+    }
 
-    // 3. LÓGICA DE FILTRADO
+    // Captura de filtros marcados
+    const generosSeleccionados = Array.from(document.querySelectorAll('#filter-genres input:checked')).map(cb => cb.value);
+    const ratingsSeleccionadas = Array.from(document.querySelectorAll('#filter-ratings input:checked')).map(cb => cb.value);
+
+    // 1. FILTRADO
     let filtrados = listaOriginal.filter(libro => {
-        
-        // Filtro de Texto (Título o Autor)
         const cumpleTexto = libro.title.toLowerCase().includes(textoBusqueda) || 
                             libro.author.toLowerCase().includes(textoBusqueda);
-
-        // Filtro de Géneros (Si no hay nada marcado, pasan todos)
         const cumpleGenero = generosSeleccionados.length === 0 || 
                              libro.genre.some(g => generosSeleccionados.includes(g));
-
-        // Filtro de Puntuación (Diferenciando por Biblioteca o TBR)
+        
         let cumpleRating = true;
         if (ratingsSeleccionadas.length > 0) {
-            // Biblioteca: usa user_rating | TBR: usa goodreads redondeado hacia abajo
             const nota = libro.status === "leido" 
                 ? Math.floor(libro.user_rating || 0) 
                 : Math.floor(parseFloat(libro.goodreads) || 0);
-            
             cumpleRating = ratingsSeleccionadas.includes(nota.toString());
         }
 
         return cumpleTexto && cumpleGenero && cumpleRating;
     });
 
-    // 4. LÓGICA DE ORDENACIÓN
+    // 2. ORDENACIÓN
     filtrados.sort((a, b) => {
         const notaA = a.user_rating || parseFloat(a.goodreads) || 0;
         const notaB = b.user_rating || parseFloat(b.goodreads) || 0;

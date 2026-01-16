@@ -1610,10 +1610,17 @@ body.is-editor .admin-controls {
                 box-shadow: 5px 0 15px rgba(0,0,0,0.5);
                 z-index: 22;
             }
-
             /* Clase activa que pondremos con JS */
                 .sidebar.active {
                     left: 0;
+                }
+            /* Ocultamos el selector de escritorio en el sidebar móvil */
+                #sidebar-filters #sort-select {
+                    display: none;
+                }
+            /* Si quieres ocultar todo su contenedor para que no deje hueco: */
+                #sidebar-filters .filter-group:has(#sort-select) {
+                    display: none;
                 }
             /* Botón de cierre del sidebar */
                 .close-sidebar {
