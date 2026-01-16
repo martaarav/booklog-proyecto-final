@@ -118,7 +118,7 @@
                 </div>
         </section>
     </main>
-
+<!-- MODAL ACCESO MODO EDITOR -->
     <div id="modal-editor" class="modal">
     <div class="modal-content">
         <button class="close-modal" id="close-login">✕</button>
@@ -130,53 +130,72 @@
         </form>
     </div>
 </div>
-
+<!-- MODAL LIBRO LEIDO -> introducir reseña -->
 <div id="modal-after" class="modal">
-    <div class="modal-content">
+    <div class="modal-content admin-modal-content">
         <button class="close-modal" id="close-after">&times;</button>
-        <h3 id="after-title">Cuéntame qué tal la experiencia</h3>
-        <p id="after-author" style="opacity: 0.7; margin-bottom: 20px; font-style: italic;"></p>
-        
-        <form id="after-form">
-            <div class="input-group">
-                <label for="rating">¿Cuántas estrellas le das?</label>
-                <input type="number" id="rating" min="1" max="5" value="5" required>
-            </div>
-            
-            <div class="input-group">
-                <label for="comment">Tus vibes sobre el libro (Thoughts)</label>
-                <textarea id="comment" maxlength="500" placeholder="Desahógate: ¿qué te ha parecido?" rows="3"></textarea>
-                <small class="char-count">Máx. 500 caracteres</small>
+
+        <div class="modal-body">
+            <div class="modal-cover">
+                <img id="after-cover-img" src="" alt="Portada del libro">
             </div>
 
-            <div class="input-group">
-                <label for="quotes">Citas para el recuerdo (Quotes)</label>
-                <textarea id="quotes" maxlength="500" placeholder="Esa frase que te dejó en el suelo..." rows="3"></textarea>
-                <small class="char-count">Máx. 500 caracteres</small>
-            </div>
+        <div class="modal-info">
+                <h3 id="after-title">Cuéntame qué tal la experiencia</h3>
+                <p id="after-author" class="admin-subtitle"></p>
+        
+            <form id="after-form">
+                <div class="input-group">
+                    <label for="rating">¿Cuántas estrellas le das?</label>
+                    <input type="number" id="rating" min="1" max="5" value="5" required>
+                </div>
             
-            <button type="submit" class="submit-btn">Mover a mi estantería</button>
-        </form>
+                <div class="input-group">
+                    <label for="comment">Tus vibes sobre el libro (Thoughts)</label>
+                    <textarea id="comment" maxlength="500" placeholder="¿Qué te ha parecido?" rows="3"></textarea>
+                    <small class="char-count">Máx. 500 caracteres</small>
+                </div>
+
+                <div class="input-group">
+                    <label for="quotes">Citas (Quotes)</label>
+                    <textarea id="quotes" maxlength="500" placeholder="Esa frase que te dejó en el suelo..." rows="3"></textarea>
+                    <small class="char-count">Máx. 500 caracteres</small>
+                </div>
+                
+                <button type="submit" class="submit-btn">Mover a mi estantería</button>
+            </form>
+            </div>
+        </div>
     </div>
 </div>
 
-<div id="modal-info" class="modal">
-    <div class="modal-content info-modal-content">
-        <button class="close-modal" id="close-info">&times;</button>
-        <h3 id="info-title">Reseña del libro</h3>
-        <p id="info-author" style="opacity: 0.7; font-style: italic; margin-bottom: 20px;"></p>
+<!-- MODAL INFO LIBRO (TBR) -->
+<div id="book-modal" class="modal">
+    <div class="modal-content">
+        <button class="close-modal" onclick="cerrarModal()">&times;</button>
         
-        <div class="info-body">
-            <div id="info-rating" class="user-rating" style="font-size: 1.5rem; margin-bottom: 20px;"></div>
-            
-            <div class="info-section" style="margin-bottom: 20px; text-align: left;">
-                <strong style="display: block; color: var(--royal-plum); margin-bottom: 5px;">Mis pensamientos:</strong>
-                <p id="info-comment" style="line-height: 1.5; color: var(--blue-noir);"></p>
+        <div class="modal-body">
+            <div class="modal-cover">
+                <img id="modal-cover-img" src="" alt="Portada del libro">
             </div>
+            
+            <div class="modal-info">
+                <h2 id="modal-title">Título del Libro</h2>
+                <h3 id="modal-author">Autor</h3>
+                
+                <div class="modal-tags">
+                    <span class="status-badge" id="modal-status">Estado</span>
+                    <div id="modal-genres" class="genres-container"></div>
+                </div>
 
-            <div class="info-section" style="text-align: left;">
-                <strong style="display: block; color: var(--royal-plum); margin-bottom: 5px;">Frases favoritas:</strong>
-                <p id="info-quotes" style="font-style: italic; border-left: 3px solid var(--celadon); padding-left: 15px; color: var(--blue-noir);"></p>
+                <div class="modal-description">
+                    <h4>Sinopsis</h4>
+                    <p id="modal-synopsis">Aquí va la sinopsis...</p>
+                </div>
+
+                <div class="modal-footer">
+                    <p><strong>Páginas:</strong> <span id="modal-pages">0/0</span></p>
+                </div>
             </div>
         </div>
     </div>
