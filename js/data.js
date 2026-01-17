@@ -1,5 +1,3 @@
-// js/data.js
-
 let misLibros = [];
 
 async function obtenerLibros() {
