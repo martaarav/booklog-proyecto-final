@@ -1,89 +1,83 @@
-let misLibros = [];
+// CAPA DE DATOS Y ENRUTAMIENTO
+// Este archivo centraliza el estado global de la aplicación.
 
+let misLibros = []; // Estado global de la colección
+
+//Carga inicial de datos: Prioriza LocalStorage y recurre al JSON si es la primera vez
 async function obtenerLibros() {
     try {
-        // 1. Intentamos obtener los libros desde el LocalStorage
+        // 1. Intentamos recuperar la sesión previa del usuario
         const librosEnMemoria = localStorage.getItem('misLibros');
 
         if (librosEnMemoria) {
-            // SI EXISTEN: Los convertimos de texto a objeto JS
+            // Deserializamos el string de LocalStorage a un objeto manipulable
             misLibros = JSON.parse(librosEnMemoria);
-            console.log("📦 Datos cargados desde LocalStorage (con tus cambios).");
         } else {
-            // NO EXISTEN: Es la primera vez, leemos el JSON original
+            // Si es un usuario nuevo, hacemos una petición asíncrona al archivo estático
             const response = await fetch("data/books.json");
             if (!response.ok) throw new Error("Error al cargar el archivo JSON");
             
             misLibros = await response.json();
             
-            // Los guardamos en LocalStorage para futuras visitas
+            // Inicializamos la persistencia local con los datos semilla
             guardarEnLocalStorage();
-            console.log("🌐 Datos cargados desde el archivo JSON original.");
         }
 
-        // 2. Una vez que tenemos los datos (de donde sea), mandamos a pintar
+        // 2. Una vez sincronizados los datos, lanzamos el renderizado de la página actual
         gestionarRenderizadoSegunPagina();
 
     } catch (error) {
-        console.error("Error en la carga de datos:", error);
+        console.error("Fallo crítico en la carga de datos:", error);
     }
 }
 
-// Función auxiliar para guardar el estado actual del array en la memoria del navegador
+// Sincroniza el estado de JavaScript con el almacenamiento del navegador
 function guardarEnLocalStorage() {
+    // Convertimos el array a texto plano para poder guardarlo en el cliente
     localStorage.setItem('misLibros', JSON.stringify(misLibros));
 }
 
-obtenerLibros();
+obtenerLibros(); // Ejecución automática al cargar el script
 
+// SISTEMA DE ENRUTAMIENTO: Decide qué componentes pintar basándose en la URL
 function gestionarRenderizadoSegunPagina() {
     const path = window.location.pathname;
 
-    // PÁGINA BIBLIOTECA (detectamos solo la palabra 'biblioteca')
+    // --- LÓGICA DE PÁGINA BIBLIOTECA ---
     if (path.includes("biblioteca")) {
         const leidos = misLibros.filter(l => l.status === "leido");
-        // Filtramos y ordenamos los leídos antes de mandarlos a pintar
-        const librosAMostrar = filtrarYOrdenarLibros(leidos);
-        renderizarBiblioteca(librosAMostrar);
+        // Aplicamos la lógica de filtrado y ordenación antes de pasar los datos a la vista
+        renderizarBiblioteca(filtrarYOrdenarLibros(leidos));
     } 
     
-    // PÁGINA TBR (detectamos solo la palabra 'tbr')
+    // --- LÓGICA DE PÁGINA TBR (Pendientes) ---
     else if (path.includes("tbr")) {
         const tbr = misLibros.filter(l => l.status === "tbr");
-        // Filtramos y ordenamos los pendientes antes de mandarlos a pintar
-        const librosAMostrar = filtrarYOrdenarLibros(tbr);
-        renderizarTBR(librosAMostrar);
+        renderizarTBR(filtrarYOrdenarLibros(tbr));
     }
 
-    // 3. CASO: HOME (INDEX)
+    // --- LÓGICA DE LA HOME (INDEX) ---
     else if (path.includes("index.html") || path === "/" || path.endsWith("/")) {
-        
-        //Hero
-        const btnRecomendar = document.getElementById('btn-recomendar');
+        const pendientes = misLibros.filter(libro => libro.status === "tbr");
+        const leidos = misLibros.filter(libro => libro.status === "leido");
 
-        // boton para generar recomendacion aleatoria en el hero
+        // Configuración del botón de recomendación (Usa los libros pendientes)
+        const btnRecomendar = document.getElementById('btn-recomendar');
         if (btnRecomendar) {
             btnRecomendar.addEventListener('click', () => {
-                console.log("🎲 Generando recomendación aleatoria...");
                 generarRecomendacionAleatoria(pendientes);
             });
         }
-        //home - seccion Progreso
+
+        // Actualización de widgets y estadísticas de la Home
         actualizarProgreso(misLibros);
-
-        //home - seccion progreso - mood lector
         actualizarMoodLector(misLibros);
-
-        // Lógica para Lectura Actual
         actualizarLecturaActual(misLibros); 
 
-        // Lógica para Últimas Lecturas (4 libros)
-        const leidos = misLibros.filter(libro => libro.status === "leido");
+        // Generamos sub-colecciones específicas para la Home (Últimos 4 y 10 aleatorios)
         const ultimasLecturas = leidos.slice(-4).reverse(); 
         renderizarUltimasLecturas(ultimasLecturas);
 
-        // Lógica para TBR Aleatorio (10 libros)
-        const pendientes = misLibros.filter(libro => libro.status === "tbr");
         const tbrAleatorio = [...pendientes].sort(() => 0.5 - Math.random()).slice(0, 10);
         renderizarTBRHome(tbrAleatorio);
     }
